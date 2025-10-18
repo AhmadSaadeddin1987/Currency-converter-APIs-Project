@@ -1,0 +1,133 @@
+/* ---------- base ---------- */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+
+body {
+font-family: "Segoe UI", Arial, sans-serif;
+background: #f5f7fb;
+color: #1f2937;
+}
+
+/* ---------- converter card ---------- */
+.converter {
+width: 75%;              /* 75% of page width */
+max-width: 1200px;
+min-height: 80vh;        /* covers most of the page vertically */
+margin: 40px auto;       /* center horizontally */
+padding: 60px 50px;      /* more internal space */
+background-color: #fff;
+border-radius: 16px;
+box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- headings ---------- */
+h1 {
+margin-bottom: 24px;
+font-size: 4rem;
+font-weight: 700;
+margin-top: 0;
+text-align: center;
+background: linear-gradient(90deg, #2563eb, #16a34a);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+text-shadow: 0 2px 6px rgba(37, 100, 235, 0.075);
+background-size: 200% auto;
+transition: background-position 0.8s ease;
+background-position: right center;
+text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15),
+            0 4px 10px rgba(37, 99, 235, 0.25);
+cursor: pointer;
+}
+
+h1:hover {
+background-position: right center;
+text-shadow:
+0 3px 6px rgba(0, 0, 0, 0.2),
+0 6px 12px rgba(22, 163, 74, 0.35);
+transform: scale(1.03);
+cursor: pointer;
+}
+
+
+.muted {
+font-size: 3rem;
+color: #806b6f;
+text-align: center;
+margin-top: -10px;
+margin-bottom: 30px;
+}
+
+/* ---------- labels ---------- */
+label {
+display: block;
+font-weight: 600;
+margin-bottom: 10px;
+font-size: 1.125rem;
+color: #111827;
+}
+
+/* ---------- form controls ---------- */
+input,
+select {
+width: 100%;
+height: 56px;
+padding: 12px 16px;
+font-size: 1.125rem;
+border: 1px solid #d1d5db;
+border-radius: 10px;
+background: #fff;
+transition: all 0.2s ease;
+}
+
+input:focus,
+select:focus {
+border-color: #2563eb;
+box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.25);
+outline: none;
+}
+
+/* ---------- button ---------- */
+button {
+width: 100%;
+height: 56px;
+margin-top: 20px;
+font-size: 1.125rem;
+font-weight: 600;
+border: none;
+border-radius: 10px;
+background: #2563eb;
+color: #fff;
+cursor: pointer;
+transition: background 0.3s ease;
+}
+
+button:hover {
+background: #1e40af;
+}
+
+/* ---------- spacing between fields ---------- */
+.converter > label,
+.converter > input,
+.converter > select,
+.converter > button {
+margin-bottom: 20px;
+}
+
+/* ---------- responsive adjustment ---------- */
+@media (max-width: 768px) {
+.converter {
+width: 90%;
+padding: 40px 24px;
+}
+
+h1 {
+font-size: 1.6rem;
+}
+
+label,
+input,
+select,
+button {
+font-size: 1rem;
+}
+}
