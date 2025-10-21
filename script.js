@@ -31,7 +31,7 @@ app.innerHTML = `
 
 <button id="convertBtn">Convert</button>
 <!-- NEW: result area -->
-<label for="result" style="margin-top:16px;">Result</label>
+<p id="loading" style="display:none; color:#2563eb; font-weight:600;">Loading…</p>
 <p id="result">—</p>
 </section>
 `;
@@ -40,6 +40,7 @@ const amountEl = document.getElementById('amount');
 const fromEl   = document.getElementById('fromCurrency');
 const toEl     = document.getElementById('toCurrency');
 const resultEl = document.getElementById('result');
+const loadingEl = document.getElementById('loading');
 const btn      = document.getElementById('convertBtn');
 
 // Number formatter (nice output like 1,234.56)
@@ -70,12 +71,15 @@ resultEl.textContent = 'Choose two different currencies.';
 return;
 }
 
-resultEl.textContent = 'Loading…';
+loadingEl.style.display = 'block';
+resultEl.textContent = '';
 
 try {
-const ACCESS_KEY = 'ACCESS_KEY';
+await new Promise((resolve) => setTimeout(resolve, 3000));
 
-// /live returns USD-based quotes: "USDEUR": 0.86144, "USDJPY": ...
+
+// /live returns USD-based quotes: "USD EUR": 0.86144, "USD JPY": ...
+const ACCESS_KEY = 'ACCESS_KEY';
 const url = `https://api.exchangerate.host/live?access_key=${ACCESS_KEY}&format=1`;
 
 const res = await fetch(url);
@@ -86,7 +90,7 @@ if (!data.success || !data.quotes) {
 throw new Error(data?.error?.info || 'API returned no quotes');
 }
 
-// Helper to read a USD->XXX quote
+// Build rate using USD-based quotes
 const q = (code) => data.quotes['USD' + code];
 
 // Build the pair rate using USD as the pivot:
@@ -102,14 +106,18 @@ if (from === 'USD') {
     rate = q(to) / q(from);
 }
 
-if (typeof rate !== 'number' || !Number.isFinite(rate)) {
-    throw new Error('Missing quote(s) for selected currencies.');
-}
+if (!Number.isFinite(rate)) throw new Error('Missing quote(s) for selected currencies.');
 
 const converted = amount * rate;
+
+// 6️Hide loading indicator & show result
+loadingEl.style.display = 'none';
 resultEl.textContent = `${nf.format(converted)} ${to} (Rate: ${nf.format(rate)} ${to} per 1 ${from})`;
 } catch (err) {
 console.error(err);
-resultEl.textContent = 'Failed to fetch rate. Please check your API key/plan and try again.';
+
+// Hide loading indicator & show error message
+loadingEl.style.display = 'none';
+resultEl.textContent = '❌ Failed to fetch rate. Please check your API key/plan and try again.';
 }
 }
