@@ -7,6 +7,8 @@ app.innerHTML = `
 <label for="amount">Amount:</label>
 <input type="number" id="amount" placeholder="Enter amount" />
 
+<div class="currency-row">
+<div>
 <label for="fromCurrency">From:</label>
 <select id="fromCurrency">
     <option value="USD">USD - United States Dollar</option>
@@ -17,7 +19,14 @@ app.innerHTML = `
     <option value="AUD">AUD - Australian Dollar</option>
     <option value="CHF">CHF - Swiss Franc</option>
 </select>
+</div>
 
+<!-- SWAP BUTTON -->
+<div class="swap-container">
+<button id="swapBtn" title="Swap currencies">⇄</button>
+</div>
+
+<div>
 <label for="toCurrency">To:</label>
 <select id="toCurrency">
     <option value="EUR">EUR - Euro</option>
@@ -28,6 +37,8 @@ app.innerHTML = `
     <option value="AUD">AUD - Australian Dollar</option>
     <option value="CHF">CHF - Swiss Franc</option>
 </select>
+</div>
+</div>
 
 <button id="convertBtn">Convert</button>
 <!-- NEW: result area -->
@@ -42,8 +53,17 @@ const toEl     = document.getElementById('toCurrency');
 const resultEl = document.getElementById('result');
 const loadingEl = document.getElementById('loading');
 const btn      = document.getElementById('convertBtn');
+const swapBtn = document.getElementById('swapBtn');
 
-// Number formatter (nice output like 1,234.56)
+// Swap button functionality
+swapBtn.addEventListener('click', () => {
+const temp = fromEl.value;
+fromEl.value = toEl.value;
+toEl.value = temp;
+if (amountEl.value.trim() !== '') convert();
+});
+
+// Number formatter
 const nf = new Intl.NumberFormat(navigator.language || 'en-US', {
 maximumFractionDigits: 4,
 });
