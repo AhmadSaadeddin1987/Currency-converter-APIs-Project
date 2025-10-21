@@ -10,11 +10,11 @@ color: #1f2937;
 
 /* ---------- converter card ---------- */
 .converter {
-width: 75%;              /* 75% of page width */
+width: 75%;
 max-width: 1200px;
-min-height: 80vh;        /* covers most of the page vertically */
-margin: 40px auto;       /* center horizontally */
-padding: 60px 50px;      /* more internal space */
+min-height: 80vh;
+margin: 40px auto;
+padding: 60px 50px;      
 background-color: #fff;
 border-radius: 16px;
 box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
