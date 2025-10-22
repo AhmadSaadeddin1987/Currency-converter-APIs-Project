@@ -144,7 +144,7 @@ await new Promise((resolve) => setTimeout(resolve, 3000));
 
 
 // /live returns USD-based quotes: "USD EUR": 0.86144, "USD JPY": ...
-const ACCESS_KEY = 'a368700434021706c2d37bf02b171a3b';
+const ACCESS_KEY = 'AccessKey';
 const url = `https://api.exchangerate.host/live?access_key=${ACCESS_KEY}&format=1`;
 
 const res = await fetch(url);
