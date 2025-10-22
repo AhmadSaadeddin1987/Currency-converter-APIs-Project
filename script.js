@@ -41,8 +41,11 @@ app.innerHTML = `
 </div>
 
 <button id="convertBtn">Convert</button>
-<!-- NEW: result area -->
-<p id="loading" style="display:none; color:#2563eb; font-weight:600;">Loading…</p>
+<!-- NEW: loading indicator with animation -->
+<p id="loading" style="display:none;" aria-live="polite">
+<span class="spinner" aria-hidden="true"></span>
+<span class="loading-text">Loading…</span>
+</p>
 <p id="result">—</p>
 </section>
 `;
@@ -172,14 +175,12 @@ if (!Number.isFinite(rate)) throw new Error('Missing quote(s) for selected curre
 
 const converted = amount * rate;
 
-// Hide loading indicator & show result
 loadingEl.style.display = 'none';
 resultEl.textContent = `${nf.format(converted)} ${to} (Rate: ${nf.format(rate)} ${to} per 1 ${from})`;
 saveState();
 } catch (err) {
 console.error(err);
 
-// Hide loading indicator & show error message
 loadingEl.style.display = 'none';
 resultEl.textContent = 'Failed to fetch rate. Please check your API key/plan and try again.';
 }
