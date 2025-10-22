@@ -55,6 +55,43 @@ const loadingEl = document.getElementById('loading');
 const btn      = document.getElementById('convertBtn');
 const swapBtn = document.getElementById('swapBtn');
 
+// Local Storage
+const STORAGE_KEY = 'cc:lastState'; // cc = currency converter
+
+function saveState() {
+const state = {
+amount: amountEl.value,
+from: fromEl.value,
+to: toEl.value,
+};
+try {
+localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+} catch (e) {
+// storage might be full or blocked (private mode)
+console.warn('Could not save state:', e);
+}
+}
+
+function loadState() {
+try {
+const raw = localStorage.getItem(STORAGE_KEY);
+if (!raw) return null;
+return JSON.parse(raw);
+} catch (e) {
+console.warn('Could not read state:', e);
+return null;
+}
+}
+
+function applyState(state) {
+if (!state) return;
+if (typeof state.amount === 'string') amountEl.value = state.amount;
+if (state.from) fromEl.value = state.from;
+if (state.to) toEl.value = state.to;
+}
+applyState(loadState());
+
+
 // Swap button functionality
 swapBtn.addEventListener('click', () => {
 const temp = fromEl.value;
@@ -62,6 +99,11 @@ fromEl.value = toEl.value;
 toEl.value = temp;
 if (amountEl.value.trim() !== '') convert();
 });
+
+amountEl.addEventListener('input', saveState);
+fromEl.addEventListener('change', saveState);
+toEl.addEventListener('change', saveState);
+swapBtn.addEventListener('click', saveState);
 
 // Number formatter
 const nf = new Intl.NumberFormat(navigator.language || 'en-US', {
@@ -99,7 +141,7 @@ await new Promise((resolve) => setTimeout(resolve, 3000));
 
 
 // /live returns USD-based quotes: "USD EUR": 0.86144, "USD JPY": ...
-const ACCESS_KEY = 'ACCESS_KEY';
+const ACCESS_KEY = 'a368700434021706c2d37bf02b171a3b';
 const url = `https://api.exchangerate.host/live?access_key=${ACCESS_KEY}&format=1`;
 
 const res = await fetch(url);
@@ -114,9 +156,9 @@ throw new Error(data?.error?.info || 'API returned no quotes');
 const q = (code) => data.quotes['USD' + code];
 
 // Build the pair rate using USD as the pivot:
-// USD->X:  rate = USDX
-// X->USD:  rate = 1 / USDX
-// X->Y:    rate = USDY / USDX
+// USD->X:  rate = US DX
+// X->USD:  rate = 1 / US DX
+// X->Y:    rate = US DY / US DX
 let rate;
 if (from === 'USD') {
     rate = q(to);
@@ -130,14 +172,15 @@ if (!Number.isFinite(rate)) throw new Error('Missing quote(s) for selected curre
 
 const converted = amount * rate;
 
-// 6️Hide loading indicator & show result
+// Hide loading indicator & show result
 loadingEl.style.display = 'none';
 resultEl.textContent = `${nf.format(converted)} ${to} (Rate: ${nf.format(rate)} ${to} per 1 ${from})`;
+saveState();
 } catch (err) {
 console.error(err);
 
 // Hide loading indicator & show error message
 loadingEl.style.display = 'none';
-resultEl.textContent = '❌ Failed to fetch rate. Please check your API key/plan and try again.';
+resultEl.textContent = 'Failed to fetch rate. Please check your API key/plan and try again.';
 }
 }
