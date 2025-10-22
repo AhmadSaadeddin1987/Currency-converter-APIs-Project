@@ -133,11 +133,15 @@ font-size: 1rem;
 }
 
 #loading {
-font-size: 1.2rem;
+display: none;
 color: #2563eb;
 font-weight: 600;
-margin-top: 10px;
-animation: pulse 1s infinite;
+text-align: center;
+margin-top: 16px;
+display: flex; 
+align-items: center; 
+justify-content: center; 
+gap: 10px;
 }
 
 @keyframes pulse {
@@ -170,4 +174,18 @@ transition: all 0.2s ease;
 background: #2563eb;
 color: #fff;
 transform: rotate(180deg);
+}
+.spinner {
+width: 16px; height: 16px;
+border: 3px solid rgba(37,99,235,0.25);
+border-top-color: #25eb3c;
+border-radius: 50%;
+animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+.spinner { animation: none; }
 }
